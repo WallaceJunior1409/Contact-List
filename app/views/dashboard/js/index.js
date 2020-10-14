@@ -97,8 +97,8 @@ const requestDataAnydeskServer = async(id) => {
         console.log(data);
         data.map((elem) => {
                 let text = `
-                <div class="col-4">
-                    <div class="card card-new-contact">
+                <div class="col-4 server">
+                    <div class="card card-new-contact ">
                         <div class="card-header">
                             <h3>Servidor</h3>
                         </div>
@@ -106,6 +106,14 @@ const requestDataAnydeskServer = async(id) => {
                             <label for="adk_server">Servidor</label>
                             <input type="number" id="adk_server" name="adk_server"
                                 placeholder="AnyDesk do Servidor" class="form-control" value="${elem.adk_servidor ?? ""}">
+                            <div class="row">
+                                <div class="col-6">
+                                    <button class="btn-server">Excluir</button>
+                                </div>
+                                <div class="col-6">
+                                    <button class="btn-server">Atualizar</button>
+                                </div>
+                            <div> 
                         </div>
                     </div>
                 </div>`;
@@ -127,7 +135,7 @@ const requestDataAnydeskStore = async(id) => {
         console.log(data);
         data.map((elem) => {
             let text = `
-            <div class="col-4">
+            <div class="col-4 server">
                 <div class="card card-new-contact">
                     <div class="card-header">
                         <h3>Servidor Loja</h3>
@@ -140,6 +148,14 @@ const requestDataAnydeskStore = async(id) => {
                         <label for="adk_store_pdv">Servidor PDV</label>
                         <input type="number" id="adk_store_pdv" name="adk_store_pdv"
                             placeholder="AnyDesk do Servidor" class="form-control" value="${elem.adk_pdv ?? ""}">
+                        <div class="row">
+                            <div class="col-6">
+                                <button class="btn-server">Excluir</button>
+                            </div>
+                            <div class="col-6">
+                                    <button class="btn-server">Atualizar</button>
+                            </div>
+                        <div> 
                     </div>
                 </div>
             </div>`;

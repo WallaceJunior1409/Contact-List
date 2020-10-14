@@ -81,4 +81,26 @@ textarea:hover {
 
     color: white;
 }
+
+.server:nth-child(n + 4) {
+    margin-top: 20px;
+}
+.btn-server {
+    width: 100%;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    color: #b9b9b9;
+    background: #e9e9e9;
+    transition: .3s;
+}
+
+.btn-server:hover {
+    background: #8E0E00;
+    background: -webkit-linear-gradient(to right, #1F1C18, #8E0E00);
+    background: linear-gradient(to right, #1F1C18, #8E0E00);
+    box-shadow: 1px 1px 4px #262626;
+
+    color: white;
+}
 </style>
