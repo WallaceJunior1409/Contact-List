@@ -2,7 +2,7 @@
     <form action="../contacts/newContact" method="post">
         <div class="row">
 
-            <div class="col">
+            <div class="col-lg-4 col-md-6">
                 <div class="card card-new-contact">
                     <div class="card-header">
                         <h3>Contatos</h3>
@@ -34,9 +34,9 @@
                         <h3>Servidor Loja</h3>
                     </div>
                     <div class="card-body">
-                        <input type="number" name="adk_store_server" placeholder="AnyDesk do Servidor da Loja"
+                        <input type="text" name="adk_store_server" placeholder="AnyDesk do Servidor da Loja"
                             class="form-control">
-                        <input type="number" name="adk_store_pdv" placeholder="AnyDesk do PDV da Loja"
+                        <input type="text" name="adk_store_pdv" placeholder="AnyDesk do PDV da Loja"
                             class="form-control">
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                         <h3>Servidor</h3>
                     </div>
                     <div class="card-body">
-                        <input type="number" name="adk_server" placeholder="AnyDesk do Servidor"
+                        <input type="text" name="adk_server" placeholder="AnyDesk do Servidor"
                             class="form-control">
                     </div>
                 </div>

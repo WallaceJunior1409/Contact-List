@@ -32,7 +32,7 @@
                     <div class="col-lg-7 ">
                         <div class="card-sign_in">
                             <h3>Sign In</h3>
-                            <form action="../login/sign_in" method="post">
+                            <form action="../Contatos/login/sign_in" method="post">
                                 <input type="text" name="user" id="user" class="form-control" placeholder="Usuario">
                                 <input type="password" name="password" id="password" class="form-control" placeholder="Senha">
                                 <button type="submit" class="btn">Login</button>

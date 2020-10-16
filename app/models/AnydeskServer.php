@@ -67,7 +67,7 @@
             {
                 $conn = Connection::openConnection();
 
-                $query_params = array("id_contato" => number_format($this->getId_contact()));
+                $query_params = array("id_contato" => $this->getId_contact());
                 $result = pg_select($conn, "anydesk_servidor", $query_params);
 
                 if (!$result || $result == []) return;

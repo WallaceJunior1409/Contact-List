@@ -53,6 +53,33 @@
             header('Location: ../dashboard/index');
         }
 
+        public function updateContact()
+        {
+            if(isset($_POST['id_contact']) && isset($_POST['name']) && isset($_POST['company']) && isset($_POST['phone']) && isset($_POST['phone_company'])  && isset($_POST['email']) && isset($_POST['observations']))
+            {
+                $contact = new Contact();
+
+                    $contact->setId($_POST['id_contact']);
+                    $contact->setName($_POST['name']);
+                    $contact->setCompany($_POST['company']);
+                    $contact->setEmail($_POST['email']);
+                    $contact->setPhone($_POST['phone']);
+                    $contact->setPhoneCompany($_POST['phone_company']);
+                    $contact->setObservations($_POST['observations']);
+
+                    $result_contact = $contact->update();
+                    var_dump($result_contact);
+
+                    var_dump($_POST['id_contact']);
+                    var_dump($_POST['name']);
+                    var_dump($_POST['phone_company']);
+                    var_dump($_POST['observations']);
+
+                    //if (!$result_contact) header('Location: ../dashboard/index?status=500');
+                
+            } else echo "Parametros inezistente";
+        }
+
         public function updateContactServer()
         {
             if(( (isset($_GET['id_server']) && $_GET['id_server'] != "") || (isset($_GET['id_store'])) && $_GET['id_store'] != "") && isset($_GET['id_contact']))
@@ -67,6 +94,7 @@
                         $anydesk_server->setAdk_server($_GET['adk_server']);
                         
                         $result_adk_server = $anydesk_server->update();
+                        var_dump($_GET['adk_server']);
                         var_dump($result_adk_server);
                     }
                     if ((isset($_GET['adk_store_server']) && $_GET['adk_store_server'] != "") || (isset($_GET['adk_store_pdv']) && $_GET['adk_store_pdv'] != "")) {
@@ -105,7 +133,7 @@
                         if (!$result_adk_server) header('Location: ');
                         var_dump($result_adk_server);
                     }
-                    if (($_GET['adk_store_server'] != "") && ($_GET['adk_store_pdv'] != "")) {
+                    if (($_GET['adk_store_server'] != "") || ($_GET['adk_store_pdv'] != "")) {
                         $anydesk_store = new AnydeskStore();
 
                         $anydesk_store->setId_contact($_GET['id_contact']);

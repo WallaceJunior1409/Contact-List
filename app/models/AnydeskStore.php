@@ -53,7 +53,7 @@
     
                     if (!$result) return false;
                     return $result;
-                    
+
                 } else if ($this->getAdk_store_pdv()) {
                     $query_params = array(
                         "adk_pdv" => $this->getAdk_store_pdv()
@@ -91,7 +91,7 @@
             {
                 $conn = Connection::openConnection();
 
-                $query_params = array("id_contato" => number_format($this->getId_contact()));
+                $query_params = array("id_contato" => $this->getId_contact());
                 $result = pg_select($conn, "anydesk_loja", $query_params);
 
                 if (!$result || $result == []) return;

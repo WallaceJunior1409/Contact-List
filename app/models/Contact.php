@@ -58,7 +58,7 @@
                     "tel_empresa" => $this->getPhonecompany(),
                     "observacoes" => $this->getObservations()
                 );
-                $result = pg_update($conn, "contatos",$query_params, ["id" => $this->getId()]);
+                $result = pg_update($conn, "contatos", $query_params, ["id" => $this->getId()]);
 
                 if (!$result) return;
                 return $result;

@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col">
             <div class="card card-new-contact">
-                <div class="card-header">
+                <div class="card-header" onclick="requestUpdateContact()">
                     <h3>Contato</h3>
                 </div>
                 <div class="card-body">
@@ -57,7 +57,7 @@
             <button type="submit" class="btn" onclick="requestDeleteContact()">Excluir Contato</button>
         </div>
         <div class="col">
-            <button type="submit" class="btn">Atualizar Contato</button>
+            <button type="submit" class="btn" onclick="refreshPageViewContact()">Atualizar Pagina</button>
         </div>
         <div class="col">
             <a class="btn" href="javascript:newPopup()">Novo Server</a>

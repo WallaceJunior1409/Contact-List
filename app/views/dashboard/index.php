@@ -52,7 +52,7 @@
     <main>
         <div class="container container-main">
             <div class="row">
-                <div class="col-2 nav-main">
+                <div class="col-lg-2 col-md-3 col-sm-12 nav-main">
                     <ul class="nav flex-column">
                         <li class="nav-item active" id="btn-nav-contact">
                             <a class="nav-link">Contatos</a>
@@ -62,7 +62,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="col-10">
+                <div class="col-lg-10 col-md-9 col-sm-12">
                     <div id="root">
                         
                     </div>
