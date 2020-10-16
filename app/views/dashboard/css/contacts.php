@@ -82,7 +82,7 @@ textarea:hover {
     color: white;
 }
 
-.server:nth-child(n + 4) {
+.server:nth-child(n + 4) .server-store:nth-child(n + 4){
     margin-top: 20px;
 }
 .btn-server {
@@ -103,4 +103,6 @@ textarea:hover {
 
     color: white;
 }
+
+
 </style>

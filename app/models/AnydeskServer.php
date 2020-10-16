@@ -36,7 +36,7 @@
                 $query_params = array(
                     "adk_servidor" => $this->getAdk_server()
                 );
-                $result = pg_update($conn, "anydesk_servidor",$query_params, ["id_contato" => $this->getId_contact()]);
+                $result = pg_update($conn, "anydesk_servidor",$query_params, ["id" => $this->getId_adk_server(), "id_contato" => $this->getId_contact()]);
 
                 if (!$result) return false;
                 return $result;
@@ -69,6 +69,27 @@
 
                 $query_params = array("id_contato" => number_format($this->getId_contact()));
                 $result = pg_select($conn, "anydesk_servidor", $query_params);
+
+                if (!$result || $result == []) return;
+                return $result;
+            } catch (\Throwable $th) 
+            {
+                return $th;
+            }
+        }
+
+        public function delete()
+        {
+            try 
+            {
+                $conn = Connection::openConnection();
+
+                $query_params = array(
+                    "id" => $this->getId_adk_server(), 
+                    "id_usuario" => $this->getId_user(),
+                    "id_contato" => $this->getId_contact()
+                );
+                $result = pg_delete($conn, "anydesk_servidor", $query_params);
 
                 if (!$result || $result == []) return;
                 return $result;

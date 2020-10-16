@@ -53,52 +53,36 @@
             header('Location: ../dashboard/index');
         }
 
-        public function updateContact()
+        public function updateContactServer()
         {
-            if(isset($_POST['id_contact']) && isset($_POST['id_user']) && isset($_POST['company']) && isset($_POST['phone']) && isset($_POST['phone_company'])  && isset($_POST['adk_server']) && isset($_POST['adk_store_server']) && isset($_POST['adk_store_pdv']))
+            if(( (isset($_GET['id_server']) && $_GET['id_server'] != "") || (isset($_GET['id_store'])) && $_GET['id_store'] != "") && isset($_GET['id_contact']))
             {
-                if (($_POST['id_contact'] != "") && ($_POST['id_user'] != "") && ($_POST['company'] != "") && ($_POST['phone'] != "") && ($_POST['phone_company'] != ""))
+                if ($_GET['id_contact'] != "")
                 {
-                    $anydesk_server = new AnydeskServer();
-                    $anydesk_store = new AnydeskStore();
-                    $contact = new Contact();
+                    if (isset($_GET['adk_server']) && ($_GET['adk_server'] != "")) {
+                        $anydesk_server = new AnydeskServer();
 
-                    $contact->setId($_POST['id_contact']);
-                    $contact->setName($_POST['name']);
-                    $contact->setCompany($_POST['company']);
-                    $contact->setEmail($_POST['email']);
-                    $contact->setPhone($_POST['phone']);
-                    $contact->setPhoneCompany($_POST['phone_company']);
-                    $contact->setObservations($_POST['observations']);
+                        $anydesk_server->setId_adk_server($_GET['id_server']);
+                        $anydesk_server->setId_contact($_GET['id_contact']);
+                        $anydesk_server->setAdk_server($_GET['adk_server']);
+                        
+                        $result_adk_server = $anydesk_server->update();
+                        var_dump($result_adk_server);
+                    }
+                    if ((isset($_GET['adk_store_server']) && $_GET['adk_store_server'] != "") || (isset($_GET['adk_store_pdv']) && $_GET['adk_store_pdv'] != "")) {
+                        $anydesk_store = new AnydeskStore();
 
-                    $result_contact = $contact->update();
-                    //var_dump($contact->getId());
-
-                    $anydesk_server->setId_contact($_POST['id_contact']);
-                    $anydesk_server->setAdk_server($_POST['adk_server']);
-
-                    $result_adk_server = $anydesk_server->update();
-
-                    $anydesk_store->setId_contact($_POST['id_contact']);
-                    $anydesk_store->setAdk_store_server($_POST['adk_store_server']);
-                    $anydesk_store->setAdk_store_pdv($_POST['adk_store_pdv']);
-
-                    $result_adk_store = $anydesk_store->update();
-
-                    if (!$result_contact) header('Location: ../dashboard/index?status=500');
-                    
-                    var_dump($result_contact);
-                    var_dump($result_adk_server);
-                    var_dump($result_adk_store);
+                        $anydesk_store->setId_adk_store($_GET['id_store']);
+                        $anydesk_store->setId_contact($_GET['id_contact']);
+                        $anydesk_store->setAdk_store_server($_GET['adk_store_server']);
+                        $anydesk_store->setAdk_store_pdv($_GET['adk_store_pdv']);
     
-                } else 
-                {header('Location: ../dashboard/index?error');
-                }
-            } else
-            {
-                header('Location: ../dashboard/index?error');
-            }
-            header('Location: ../dashboard/index');
+                        $result_adk_store = $anydesk_store->update();
+                        var_dump($result_adk_store);
+                    }
+                } else echo "Parametros Vazios";
+            } else echo "Parametros inezistente";
+            //die("<script>window.close()</script>");
         }
 
         public function newServer()
@@ -136,11 +120,11 @@
                 } else
                 {
                     printf("Erro com Usuarios");
-                    header('Location: ');
+                    die("<script>window.close()</script>");
                 }
             } else{
                 printf("Erro com os parametros");
-                header('Location: ');
+                die("<script>window.close()</script>");
             }
             die("<script>window.close()</script>");
         }
@@ -189,13 +173,47 @@
                 $contact->setId($params[0] ?? 0);
 
                 $result = $contact->delete();
-                if (!$result) echo "<script>window.close();</script>";;
+                if (!$result) die("<script>window.close()</script>");
                 //var_dump($params[0]);
-            } else
-            {
+            } else die("<script>window.close()</script>");
+            die("<script>window.close()</script>");
+        }
+
+        public function deleteServer(){
+            if(isset($_POST['id_server']) && isset($_POST['id_contact'])) {
+                if (($_POST['id_server'] != "") && ($_POST['id_contact'] != "")) {
+                    $anydesk_server = new AnydeskServer();
+
+                    $anydesk_server->setId_adk_server($_POST['id_server']);
+                    $anydesk_server->setId_user($_SESSION['USER'] ?? 0);
+                    $anydesk_server->setId_contact($_POST['id_contact']);
+
+                    $result = $anydesk_server->delete();
+                    if (!$result) echo "<script>window.close();</script>";
+                    var_dump($result);
+                }
                 echo "<script>window.close();</script>";
-            }
+            } else echo "<script>window.close();</script>";
             echo "<script>window.close();</script>";
+        }
+
+        public function deleteServerStore()
+        {
+            if(isset($_POST['id_store']) && isset($_POST['id_contact'])) {
+                if (($_POST['id_store'] != "") && ($_POST['id_contact'] != "")) {
+                    $anydesk_store = new AnydeskStore();
+
+                    $anydesk_store->setId_adk_store($_POST['id_store']);
+                    $anydesk_store->setId_user($_SESSION['USER'] ?? 0);
+                    $anydesk_store->setId_contact($_POST['id_contact']);
+
+                    $result = $anydesk_store->delete();
+                    if (!$result) die("<script>window.close()</script>");
+                    var_dump($result);
+                }
+                die("<script>window.close()</script>");
+            } else die("<script>window.close()</script>");
+            die("<script>window.close()</script>");
         }
     }
 ?>

@@ -35,14 +35,34 @@
             try 
             {
                 $conn = Connection::openConnection();
-                $query_params = array(
-                    "adk_servidor" => $this->getAdk_store_server(),
-                    "adk_pdv" => $this->getAdk_store_pdv()
-                );
-                $result = pg_update($conn, "anydesk_loja",$query_params, ["id_contato" => $this->getId_contact()]);
+                if ($this->getAdk_store_server() && $this->getAdk_store_pdv()) {
+                    $query_params = array(
+                        "adk_servidor" => $this->getAdk_store_server(),
+                        "adk_pdv" => $this->getAdk_store_pdv()
+                    );
+                    $result = pg_update($conn, "anydesk_loja",$query_params, ["id" => $this->getId_adk_store(),"id_contato" => $this->getId_contact()]);
+    
+                    if (!$result) return false;
+                    return $result;
 
-                if (!$result) return false;
-                return $result;
+                } else if ($this->getAdk_store_server()) {
+                    $query_params = array(
+                        "adk_servidor" => $this->getAdk_store_server()
+                    );
+                    $result = pg_update($conn, "anydesk_loja",$query_params, ["id" => $this->getId_adk_store(),"id_contato" => $this->getId_contact()]);
+    
+                    if (!$result) return false;
+                    return $result;
+                    
+                } else if ($this->getAdk_store_pdv()) {
+                    $query_params = array(
+                        "adk_pdv" => $this->getAdk_store_pdv()
+                    );
+                    $result = pg_update($conn, "anydesk_loja",$query_params, ["id" => $this->getId_adk_store(),"id_contato" => $this->getId_contact()]);
+
+                    if (!$result) return false;
+                    return $result;
+                }
             } catch (\Throwable $th) 
             {
                 return $th;
@@ -73,6 +93,27 @@
 
                 $query_params = array("id_contato" => number_format($this->getId_contact()));
                 $result = pg_select($conn, "anydesk_loja", $query_params);
+
+                if (!$result || $result == []) return;
+                return $result;
+            } catch (\Throwable $th) 
+            {
+                return $th;
+            }
+        }
+
+        public function delete()
+        {
+            try 
+            {
+                $conn = Connection::openConnection();
+
+                $query_params = array(
+                    "id" => $this->getId_adk_store(), 
+                    "id_usuario" => $this->getId_user(),
+                    "id_contato" => $this->getId_contact()
+                );
+                $result = pg_delete($conn, "anydesk_loja", $query_params);
 
                 if (!$result || $result == []) return;
                 return $result;
