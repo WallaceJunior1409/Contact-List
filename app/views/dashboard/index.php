@@ -34,8 +34,8 @@
                         height="45" alt="Satus Sistemas" loading="lazy">
                 </a>
                 <form class="d-flex">
-                    <input class="form-control mr-3 input-search" type="search" placeholder="Search"
-                        aria-label="Search" disabled>
+                    <input class="form-control mr-3 input-search" type="search" placeholder="Search" aria-label="Search"
+                        disabled>
                     <button class="btn btn-outline-danger btn-search" type="submit">
                         <span class="material-icons">search</span>
                     </button>
@@ -64,7 +64,7 @@
                 </div>
                 <div class="col-lg-10 col-md-9 col-sm-12">
                     <div id="root">
-                        
+
                     </div>
                 </div>
             </div>
@@ -80,6 +80,9 @@
         integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous">
     </script>
     <script src="javascript" defer></script>
+    <script>
+        
+    </script>
 </body>
 
 </html>

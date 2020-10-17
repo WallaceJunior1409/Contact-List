@@ -58,6 +58,7 @@ const viewContact = (id) => {
                 requestDataContact(id);
                 requestDataAnydeskServer(id);
                 requestDataAnydeskStore(id);
+
             } else {
                 cardCreateContacts.innerHTML += `Error : ${xmlHttpRequest.status}`;
                 console.log(`Status : ${xmlHttpRequest.status}`);
@@ -88,6 +89,27 @@ const requestDataContact = async(id) => {
     } else {
         alert("HTTP-Error: " + response.status);
     }
+}
+
+const createContact = () => {
+    const xmlHttpRequest = new XMLHttpRequest();
+    const newForm = new FormData();
+
+    newForm.append("name", document.getElementById('name').value ?? "");
+    newForm.append("company", document.getElementById('company').value ?? "");
+    newForm.append("email", document.getElementById('email').value ?? "");
+    newForm.append("phone", masks.phone(document.getElementById('phone').value) ?? "");
+    newForm.append("phone_company", masks.phone(document.getElementById('phone_company').value) ?? "");
+    newForm.append("observations", document.getElementById('observations').value ?? "");
+
+    newForm.append("adk_server", document.getElementById('adk_server').value ?? "0");
+    newForm.append("adk_store_server", document.getElementById('adk_store_server').value ?? "0");
+    newForm.append("adk_store_pdv", document.getElementById('adk_store_pdv').value ?? "0");
+
+    console.log(masks.phone(document.getElementById('phone').value));
+    xmlHttpRequest.open("POST", "../contacts/newContact");
+    xmlHttpRequest.send(newForm);
+    location.reload();
 }
 
 const requestDeleteContact = async() => {
@@ -671,3 +693,18 @@ btnNavNewContacts.addEventListener("click", () => {
     root.innerHTML = "";
     addPageCreateContacts();
 });
+/**
+ * Mask
+ */
+const masks = {
+    phone(value) {
+        const newPhone = value
+            .replace(/\D/g, '')
+            .replace(/(\d{2})(\d)/, '($1) $2')
+            .replace(/(\d{4})(\d)/, '$1-$2')
+            .replace(/(\d{4})-(\d)(\d{4})/, '$1$2-$3')
+            .replace(/(-\d{4})\d+?$/, '$1');
+        //console.log(newPhone);
+        return newPhone;
+    }
+}

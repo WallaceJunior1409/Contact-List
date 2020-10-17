@@ -3,15 +3,15 @@
     {
         public function newContact()
         {
-            if(isset($_POST['id_user']) && isset($_POST['company']) && isset($_POST['phone']) && isset($_POST['phone_company'])  && isset($_POST['adk_server']) && isset($_POST['adk_store_server']) && isset($_POST['adk_store_pdv']))
+            if(isset($_POST['company']) && isset($_POST['phone']) && isset($_POST['phone_company'])  && isset($_POST['adk_server']) && isset($_POST['adk_store_server']) && isset($_POST['adk_store_pdv']))
             {
-                if (($_POST['id_user'] != "") && ($_POST['company'] != "") && ($_POST['phone'] != "") && ($_POST['phone_company'] != ""))
+                if (($_POST['company'] != "") && ($_POST['phone'] != "") && ($_POST['phone_company'] != ""))
                 {
                     $anydesk_server = new AnydeskServer();
                     $anydesk_store = new AnydeskStore();
                     $contact = new Contact();
 
-                    $contact->setId_user($_POST['id_user']);
+                    $contact->setId_user($_SESSION['USER']);
                     $contact->setName($_POST['name']);
                     $contact->setCompany($_POST['company']);
                     $contact->setEmail($_POST['email']);
@@ -23,14 +23,14 @@
                     //var_dump($contact->getId());
 
                     $anydesk_server->setId_contact($contact->getId());
-                    $anydesk_server->setId_user($_POST['id_user']);
+                    $anydesk_server->setId_user($_SESSION['USER']);
                     $anydesk_server->setAdk_server($_POST['adk_server'] ?? 0);
 
                     $result_adk_server = $anydesk_server->create();
 
 
                     $anydesk_store->setId_contact($contact->getId());
-                    $anydesk_store->setId_user($_POST['id_user']);
+                    $anydesk_store->setId_user($_SESSION['USER']);
                     $anydesk_store->setAdk_store_server($_POST['adk_store_server'] ?? 0);
                     $anydesk_store->setAdk_store_pdv($_POST['adk_store_pdv'] ?? 0);
 

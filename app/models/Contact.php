@@ -37,7 +37,7 @@
                 $last_id = pg_fetch_array(pg_query("SELECT CURRVAL('contatos_id_seq')"));
                 $this->setId($last_id[0]);
 
-                if (!$result) return "oal";
+                if (!$result) return ;
                 return $result;
             } catch (\Throwable $th) 
             {
