@@ -6,8 +6,9 @@
         private $id_adk_store;
         private $id_user;
         private $id_contact;
-        private $adk_store_server;
-        private $adk_store_pdv;
+        private $id_adk_server;
+        private $type_server;
+        private $obs_store;
 
         public function create()
         {
@@ -17,15 +18,17 @@
                 $query_params = array(
                     "id_usuario" => $this->getId_user(),
                     "id_contato" => $this->getId_contact(),
-                    "adk_servidor" => $this->getAdk_store_server(),
-                    "adk_pdv" => $this->getAdk_store_pdv()
+                    "id_adk_servidor" => $this->getId_adk_server(),
+                    "tipo_servidor" => $this->getType_server(),
+                    "obs_loja" => $this->getObs_store()
                 );
-                $result = pg_insert($conn, "anydesk_loja",$query_params);
+                $result = pg_insert($conn, "anydesk_loja", $query_params);
 
                 if (!$result) return false;
                 return $result;
             } catch (\Throwable $th) 
             {
+                $conn = Connection::exitConnection();
                 return $th;
             }
         }
@@ -35,28 +38,28 @@
             try 
             {
                 $conn = Connection::openConnection();
-                if ($this->getAdk_store_server() && $this->getAdk_store_pdv()) {
+                if ($this->getType_server() && $this->getObs_store()) {
                     $query_params = array(
-                        "adk_servidor" => $this->getAdk_store_server(),
-                        "adk_pdv" => $this->getAdk_store_pdv()
+                        "tipo_servidor" => $this->getType_server(),
+                        "obs_loja" => $this->getObs_store()
                     );
                     $result = pg_update($conn, "anydesk_loja",$query_params, ["id" => $this->getId_adk_store(),"id_contato" => $this->getId_contact()]);
     
                     if (!$result) return false;
                     return $result;
 
-                } else if ($this->getAdk_store_server()) {
+                } else if ($this->getType_server()) {
                     $query_params = array(
-                        "adk_servidor" => $this->getAdk_store_server()
+                        "tipo_servidor" => $this->getType_server()
                     );
                     $result = pg_update($conn, "anydesk_loja",$query_params, ["id" => $this->getId_adk_store(),"id_contato" => $this->getId_contact()]);
     
                     if (!$result) return false;
                     return $result;
 
-                } else if ($this->getAdk_store_pdv()) {
+                } else if ($this->getObs_store()) {
                     $query_params = array(
-                        "adk_pdv" => $this->getAdk_store_pdv()
+                        "obs_loja" => $this->getObs_store()
                     );
                     $result = pg_update($conn, "anydesk_loja",$query_params, ["id" => $this->getId_adk_store(),"id_contato" => $this->getId_contact()]);
 
@@ -65,7 +68,9 @@
                 }
             } catch (\Throwable $th) 
             {
+                $conn = Connection::exitConnection();
                 return $th;
+                
             }
         }
 
@@ -81,6 +86,7 @@
                 return $result;
             } catch (\Throwable $th) 
             {
+                $conn = Connection::exitConnection();
                 return $th;
             }
         }
@@ -91,13 +97,17 @@
             {
                 $conn = Connection::openConnection();
 
-                $query_params = array("id_contato" => $this->getId_contact());
+                $query_params = array(
+                    "id_contato" => $this->getId_contact(),
+                    "id_adk_servidor" => $this->getId_adk_server()
+                );
                 $result = pg_select($conn, "anydesk_loja", $query_params);
 
                 if (!$result || $result == []) return;
                 return $result;
             } catch (\Throwable $th) 
             {
+                $conn = Connection::exitConnection();
                 return $th;
             }
         }
@@ -119,6 +129,7 @@
                 return $result;
             } catch (\Throwable $th) 
             {
+                $conn = Connection::exitConnection();
                 return $th;
             }
         }
@@ -184,41 +195,61 @@
         }
 
         /**
-         * Get the value of adk_store_server
+         * Get the value of type_server
          */ 
-        public function getAdk_store_server()
+        public function getType_server()
         {
-                return $this->adk_store_server;
+                return $this->type_server;
         }
 
         /**
-         * Set the value of adk_store_server
+         * Set the value of type_server
          *
          * @return  self
          */ 
-        public function setAdk_store_server($adk_store_server)
+        public function setType_server($type_server)
         {
-                $this->adk_store_server = $adk_store_server;
+                $this->type_server = $type_server;
 
                 return $this;
         }
 
         /**
-         * Get the value of adk_store_pdv
+         * Get the value of obs_store
          */ 
-        public function getAdk_store_pdv()
+        public function getObs_store()
         {
-                return $this->adk_store_pdv;
+                return $this->obs_store;
         }
 
         /**
-         * Set the value of adk_store_pdv
+         * Set the value of obs_store
          *
          * @return  self
          */ 
-        public function setAdk_store_pdv($adk_store_pdv)
+        public function setObs_store($obs_store)
         {
-                $this->adk_store_pdv = $adk_store_pdv;
+                $this->obs_store = $obs_store;
+
+                return $this;
+        }
+
+        /**
+         * Get the value of id_adk_server
+         */ 
+        public function getId_adk_server()
+        {
+                return $this->id_adk_server;
+        }
+
+        /**
+         * Set the value of id_adk_server
+         *
+         * @return  self
+         */ 
+        public function setId_adk_server($id_adk_server)
+        {
+                $this->id_adk_server = $id_adk_server;
 
                 return $this;
         }

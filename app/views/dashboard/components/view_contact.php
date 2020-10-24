@@ -42,25 +42,4 @@
         </div>
     </div>
 </div>
-
-<div class="card card-create" style="padding: 2%; margin-top:20px;">
-    <div class="row" id="rowCardServer"></div>
-</div>
-
-<div class="card card-create" style="padding: 2%; margin-top:20px;">
-    <div class="row" id="rowCardPDV"></div>
-</div>
-
-<div class="card card-create" style="padding: 2%;margin-top:20px;">
-    <div class="row row-btn">
-        <div class="col">
-            <button type="submit" class="btn" onclick="requestDeleteContact()">Excluir Contato</button>
-        </div>
-        <div class="col">
-            <button type="submit" class="btn" onclick="refreshPageViewContact()">Atualizar Pagina</button>
-        </div>
-        <div class="col">
-            <a class="btn" href="javascript:newPopup()">Novo Server</a>
-        </div>
-    </div>
-</div>
+<div id="serverRoot"></div>

@@ -16,7 +16,7 @@
 }
 
 
-.form-control:focus {
+.form-control:focus, textarea:focus {
     border-color: #8E0E00;
     box-shadow: 0 0 0 0.2rem rgb(160 18 18 / 16%);
 }

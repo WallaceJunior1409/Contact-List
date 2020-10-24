@@ -1,6 +1,5 @@
 <div class="card card-create" style="padding: 2%;">
     <div class="row">
-
         <div class="col-lg-4 col-md-6">
             <div class="card card-new-contact">
                 <div class="card-header">
@@ -8,7 +7,7 @@
                 </div>
                 <div class="card-body">
                     <input type="hidden" name="id">
-                    <input type="hidden" name="id_user" value="<?php echo $_SESSION['USER'];?>">
+                    <input type="hidden" name="id_user" value="<?php echo $_SESSION['USER']; ?>">
 
                     <input type="text" name="name" id="name" placeholder="Nome do Gerente" class="form-control">
 
@@ -31,13 +30,13 @@
         <div class="col">
             <div class="card card-new-contact">
                 <div class="card-header">
-                    <h3>Servidor Loja</h3>
+                    <h3>Servidor</h3>
                 </div>
                 <div class="card-body">
-                    <input type="text" name="adk_store_server" id="adk_store_server"
-                        placeholder="AnyDesk do Servidor da Loja" class="form-control">
-                    <input type="text" name="adk_store_pdv" id="adk_store_pdv" placeholder="AnyDesk do PDV da Loja"
+                    <input type="text" name="type_server" id="type_server" placeholder="Tipo do Servidor do Prime"
                         class="form-control">
+                    <textarea name="obs_server" id="obs_server" cols="30" rows="10"
+                        placeholder="Dados do Servidor"></textarea>
                 </div>
             </div>
         </div>
@@ -45,11 +44,13 @@
         <div class="col">
             <div class="card card-new-contact">
                 <div class="card-header">
-                    <h3>Servidor</h3>
+                    <h3>Servidor Loja</h3>
                 </div>
                 <div class="card-body">
-                    <input type="text" name="adk_server" id="adk_server" placeholder="AnyDesk do Servidor"
-                        class="form-control">
+                    <input type="text" name="type_server_store" id="type_server_store"
+                        placeholder="Tipo do Servidor da Loja" class="form-control">
+                    <textarea name="obs_store" id="obs_store" cols="30" rows="10"
+                        placeholder="Dados do Servidor da loja"></textarea>
                 </div>
             </div>
         </div>
@@ -60,7 +61,7 @@
         <div class="col"></div>
         <div class="col"></div>
         <div class="col">
-            <button class="btn" onclick="createContact()">Criar Contato</button>
+            <button class="btn" type="submit" onclick="createContact()">Criar Contato</button>
         </div>
     </div>
 </div>

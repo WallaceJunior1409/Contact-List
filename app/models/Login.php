@@ -13,8 +13,8 @@
             try 
             {
                 $params = array(
-                    "usuario" => $this->user,
-                    "senha" => $this->password
+                    "usuario" => $this->getUser(),
+                    "senha" => $this->getPassword()
                 );
                 $result = pg_select($conn,'usuarios', $params);
 
@@ -22,6 +22,7 @@
                 return $result[0]['id'];
             } catch (\Exception $th) 
             {
+                $conn = Connection::exitConnection();
                 throw $th;
             }
             

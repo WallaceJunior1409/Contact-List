@@ -17,17 +17,18 @@
                         $login->setPassword($_POST['password']);
                         $result = $login->validateLogin();
 
-                        if (!$result || $result == '') return header('Location: ../');
+                        if (!$result || $result == '') return header("Location: http://localhost:90/Projetos/Contatos/login/index");
+
                         if (is_string($result)){ 
                             $_SESSION['USER'] = $result;
-                            header('Location: ../dashboard/index'); 
+                            header("Location: http://localhost:90/Projetos/Contatos/dashboard/index"); 
                         }
                     } catch (Exception $ex) {
                         print "Erro : ".$ex->getMessage();
                     }
-                } else header('Location: ../');
+                } else header("Location: http://localhost:90/Projetos/Contatos/login/index");
                 
-            } else header('Location: ../');
+            } else header("Location: http://localhost:90/Projetos/Contatos/login/index");
         }
     }
 ?>

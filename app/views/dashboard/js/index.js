@@ -7,7 +7,8 @@ const cardContact = document.getElementById('cardContact');
 const addPageContact = () => {
     const xmlHttpRequest = new XMLHttpRequest();
 
-    xmlHttpRequest.open("GET", "../routes/routeTableContact");
+    xmlHttpRequest.open("GET", `../routes/routeTableContact`);
+
     xmlHttpRequest.onreadystatechange = () => {
         if (xmlHttpRequest.readyState === XMLHttpRequest.DONE) {
             if (xmlHttpRequest.status === 0 || (xmlHttpRequest.status >= 200 && xmlHttpRequest.status < 400)) {
@@ -21,6 +22,30 @@ const addPageContact = () => {
     xmlHttpRequest.send();
 }
 addPageContact()
+
+const addPageSearchContact = async (params = "") => {
+    document.getElementById('listContacts').innerHTML = "";
+
+    let response = await fetch(`../contacts/searchContacts/${params}`);
+
+    if (response.ok) {    
+        let data = await response.json();
+        console.log(data);
+
+        data.map((elem) => {
+            let text = `
+            <tr onclick="viewContact(${elem.id})">
+                <td id="rowTableContact">${elem.nome}</td>
+                <td id="rowTableContact">${elem.email}</td>
+                <td id="rowTableContact">${elem.empresa}</td>
+            </tr>
+            `;
+            document.getElementById('listContacts').innerHTML += text;
+        });
+    } else {
+        alert("HTTP-Error: " + response.status);
+    }
+}
 
 const addPageCreateContacts = () => {
     const xmlHttpRequest = new XMLHttpRequest();
@@ -39,11 +64,6 @@ const addPageCreateContacts = () => {
     xmlHttpRequest.send();
 }
 
-const addPageCreateServer = () => {
-    const amountServer = prompt("Digite a quantidade de servidor a  ser criado:");
-    console.log(amountServer);
-}
-
 const viewContact = (id) => {
     const xmlHttpRequest = new XMLHttpRequest();
 
@@ -57,7 +77,6 @@ const viewContact = (id) => {
                 console.log(id);
                 requestDataContact(id);
                 requestDataAnydeskServer(id);
-                requestDataAnydeskStore(id);
 
             } else {
                 cardCreateContacts.innerHTML += `Error : ${xmlHttpRequest.status}`;
@@ -102,15 +121,17 @@ const createContact = () => {
     newForm.append("phone_company", masks.phone(document.getElementById('phone_company').value) ?? "");
     newForm.append("observations", document.getElementById('observations').value ?? "");
 
-    newForm.append("adk_server", document.getElementById('adk_server').value ?? "0");
-    newForm.append("adk_store_server", document.getElementById('adk_store_server').value ?? "0");
-    newForm.append("adk_store_pdv", document.getElementById('adk_store_pdv').value ?? "0");
+    newForm.append("type_server", document.getElementById('type_server').value ?? "");
+    newForm.append("obs_server", document.getElementById('obs_server').value ?? "");
+    
+    newForm.append("type_server_store", document.getElementById('type_server_store').value ?? "");
+    newForm.append("obs_store", document.getElementById('obs_store').value ?? "");
 
-    console.log(masks.phone(document.getElementById('phone').value));
     xmlHttpRequest.open("POST", "../contacts/newContact");
     xmlHttpRequest.send(newForm);
     location.reload();
 }
+
 
 const requestDeleteContact = async() => {
     const id = document.getElementById('id_contact').value;
@@ -119,7 +140,7 @@ const requestDeleteContact = async() => {
     window.close();
 }
 
-const newPopup = () => {
+const newPopup = (idServer) => {
     text = `
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
         integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
@@ -133,13 +154,39 @@ const newPopup = () => {
         background: white;
         box-shadow: 0 0 .5rem rgb(10 10 10 / 25%);
     }
+    .card-new-server:hover>.card-header{
+        transition-duration: .3s;
+        background: #8E0E00;
+        background: -webkit-linear-gradient(to right, #1F1C18, #8E0E00);
+        background: linear-gradient(to right, #1F1C18, #8E0E00);
+    }
+    .card-header h3 {
+        text-align: center;
+        font-weight: 300;
+        color: #c9c9c9;
+    }
     .card-new-server input::placeholder{
         color: #c9c9c9;
     }
-    input{
+    input[type="text"]{
         border-radius: 60px;
         transition-duration: .1s;
         cursor: pointer;
+        outline: none;
+    }
+    input[type="text"]:focus {
+        border: 1px solid #8E0E00;
+        box-shadow: 
+    }
+    textarea {
+        width: 100%;
+        border-radius: 10px;
+        border-color: #c9c9c9;
+    }
+    textarea:focus
+    {
+        border: 1px solid #8E0E00;
+        outline: none;
     }
 
     label{
@@ -147,7 +194,8 @@ const newPopup = () => {
         font-weight: 500;
     }
     .btn {
-        width: 334px;
+        position: relative;
+        width: 100%;
         margin-top: 10px;
         cursor: pointer;
         color: white;
@@ -166,117 +214,164 @@ const newPopup = () => {
     
     <div class="container-fluid" style="margin-top: 20px;">
         <div class="card card-new-server">
+            <div class="card-header">
+                <h3>Servidor</h3>
+            </div>
             <div class="card-body">
-                <form action="../contacts/newServer" method="get">
-                <input type="hidden" name="id_contact" value="${document.getElementById('id_contact').value}">
-                    <label class="form-label">Servidor Principal</label>
-                    <input type="text" class="form-control" name="adk_server" id="adk_server" placeholder="Servidor do prime" >
+                <form action="../contacts/newServer" method="post">
+                    <input type="hidden" name="id_contact" value="${document.getElementById('id_contact').value}">
+                    
+                    <label class="form-label">Tipo do Servidor</label>
+                    <input type="text" class="form-control" name="type_server" id="type_server" placeholder="Ex. AnyDesk" >
 
-                    <label class="form-label">Servidor Loja</label>
-                    <input type="text" class="form-control" name="adk_store_server" id="adk_store_server" placeholder="Servidor da loja">
+                    <label class="form-label">Dados do Servidor</label>
+                    <textarea class="form-label" name="obs_server" id="obs_server"></textarea>
 
-                    <label class="form-label">Servidor PDV</label>
-                    <input type="text" class="form-control" name="adk_store_pdv" id="adk_store_pdv" placeholder="Servidor do PDV">
+                    <button class="btn" type="submit">Salvar</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card card-new-server mt-3">
+            <div class="card-header">
+                <h3>Servidor Loja</h3>
+            </div>
+            <div class="card-body">
+                <form action="../contacts/newServer" method="POST">
+                    <input type="hidden" name="id_contact" value="${document.getElementById('id_contact').value}">
+                    <input type="hidden" name="id_adk_server" value="${idServer}">
+                    
+                    <label class="form-label">Tipo do Servidor Loja</label>
+                    <input type="text" class="form-control" name="type_server_store" id="type_server_store" placeholder="Ex. AnyDesk" >
+
+                    <label class="form-label">Dados do Server Loja</label>
+                    <textarea class="form-label" name="obs_store" id="obs_store"></textarea>
 
                     <button class="btn" type="submit">Salvar</button>
                 </form>
             </div>
         </div>
     </div>
-    `
-
+    `;
     const varWindow = window.open(
         '',
         '',
-        "width=400, height=350, top=100, left=500, scroll=no");
+        "width=400, height=350, top=100, left=500");
     varWindow.document.write(text);
 }
 
-const requestDataAnydeskServer = async(id) => {
-    document.getElementById('rowCardServer').innerHTML = "";
-    let response = await fetch(`../contacts/showAnydeskServerJson/${id}`);
+const requestDataAnydeskServer = async (id) => {
+    document.getElementById('serverRoot').innerHTML = "";
 
-    if (response.ok) {
-        let data = await response.json();
-        console.log(data);
-        data.map((elem) => {
-                let text = `
-                <div class="col-4 server">
-                    <div class="card card-new-contact ">
-                        <div class="card-header">
-                            <h3>Servidor</h3>
+    let responseServer = await fetch(`../contacts/showAnydeskServerJson/${id}`);
+
+    if (responseServer.ok) {    
+        let dataServer = await responseServer.json();
+        console.log(dataServer);
+
+        dataServer.map((elem) => {
+            let text = `
+            <div class="card card-create" style="margin-top: 20px;padding: 2%;">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="card card-new-contact">
+                            <div class="card-header">
+                                <h3>Servidor</h3>
+                            </div>
+                            <div class="card-body">
+                            
+                                <label>Tipo do Servidor</label>
+                                <input type="text" id="type_server" value="${elem.tipo_servidor ?? ""}" class="form-control" disabled>
+                                
+                                <label>Dados do Servidor</label>
+                                <textarea class="form-control" id="obs_server" disabled>${elem.obs_servidor ?? ""}</textarea>
+                            
+                                <div class="row">
+                                    <div class="col-6">
+                                        <button class="btn-server" onclick="requestDeleteServerStore(${elem.id}, ${elem.id_contato})">Excluir</button>
+                                    </div>
+                                    <div class="col-6">
+                                        <button class="btn-server" onclick="requestUpdateServer(${elem.id}, ${elem.id_contato})">Atualizar</button>
+                                    </div>
+                                </div> 
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <label for="adk_server">Servidor</label>
-                            <input type="text" id="adk_server" name="adk_server"
-                                placeholder="AnyDesk do Servidor" class="form-control" value="${elem.adk_servidor ?? ""}" disabled>
-                            
-                            <input type="hidden" id="id_server" name="id_server" value="${elem.id ?? ""}">
-                            <input type="hidden" id="id_contact" name="id_contact" value="${elem.id_contato ?? ""}">
-                            <input type="hidden" id="id_user" name="id_user" value="${elem.id_usuario ?? ""}">
-                            
-                            <div class="row">
-                                <div class="col-6">
-                                    <button class="btn-server" onclick="requestDeleteServer(${elem.id ?? ""}, ${elem.id_contato ?? ""})">Excluir</button>
+                    </div>
+                </div>
+
+                <div class="row mt-3" id="rowServer${elem.id}"></div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="card card-create" style="padding: 2%;margin-top:20px;">
+                            <div class="row row-btn">
+                                <div class="col">
+                                    <button type="submit" class="btn" onclick="requestDeleteContact()">Excluir Contato</button>
                                 </div>
-                                <div class="col-6">
-                                    <button class="btn-server" onclick="requestUpdateServer(${elem.id ?? ""}, ${elem.id_contato ?? ""})">Atualizar</button>
+                                <div class="col">
+                                    <button type="submit" class="btn" onclick="refreshPageViewContact()">Atualizar Pagina</button>
+                                </div>
+                                <div class="col">
+                                    <a class="btn" href="javascript:newPopup(${elem.id})">Novo Server</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>`;
-                document.getElementById('rowCardServer').innerHTML += text;
-                console.log(elem);
-            })
-            //document.getElementById('adk_server').value = data[0].adk_servidor ? data[0].adk_servidor : "";
+                <div>
+            </div>`;
+            document.getElementById('serverRoot').innerHTML += text;
+            console.log(elem);
+            requestDataAnydeskStore(elem.id_contato, elem.id);
+        });
     } else {
         alert("HTTP-Error: " + response.status);
     }
 }
 
-const requestDataAnydeskStore = async(id) => {
-    document.getElementById('rowCardPDV').innerHTML = "";
-    let response = await fetch(`../contacts/showAnydeskStoreJson/${id}`);
+const requestDataAnydeskStore = async (id, idServer) => {
+    document.getElementById(`rowServer${idServer}`).innerHTML = "";
 
-    if (response.ok) {
-        let data = await response.json();
-        console.log(data);
-        data.map((elem) => {
-            let text = `
-            <div class="col-4 server-store">
-                <div class="card card-new-contact">
-                    <div class="card-header">
-                        <h3>Servidor Loja</h3>
-                    </div>
-                    <div class="card-body">
-                        <label for="adk_server_store">Servidor</label>
-                        <input type="text" id="adk_server_store" name="adk_server_store"
-                            placeholder="Servidor Loja" class="form-control" value="${elem.adk_servidor ?? ""}" disabled>
-                    
-                        <label for="adk_store_pdv">Servidor PDV</label>
-                        <input type="text" id="adk_store_pdv" name="adk_store_pdv"
-                            placeholder="Servidor PDV" class="form-control" value="${elem.adk_pdv ?? ""}" disabled>
+    let responseStore = await fetch(`../contacts/showAnydeskStoreJson/${id}/${idServer}`);
+    if (responseStore.ok) {
+        let dataStore = await responseStore.json();
 
-                        <input type="hidden" id="id_store" name="id_store" value="${elem.id ?? ""}">
-                        <input type="hidden" id="id_contact" name="id_contact" value="${elem.id_contato ?? ""}">
-                        <input type="hidden" id="id_user" name="id_user" value="${elem.id_usuario ?? ""}">
-                        <div class="row">
-                            <div class="col-6">
-                                <button class="btn-server" onclick="requestDeleteServerStore(${elem.id ?? ""}, ${elem.id_contato ?? ""})">Excluir</button>
-                            </div>
-                            <div class="col-6">
-                                    <button class="btn-server" onclick="requestUpdateServerStore(${elem.id ?? ""}, ${elem.id_contato ?? ""})">Atualizar</button>
-                            </div>
-                        <div> 
+        dataStore.map((elem) => {
+            if (elem.id_adk_servidor == idServer) {
+
+                let text = `
+                <div class="col-4 server-store ">
+                    <div class="card card-new-contact">
+                        <div class="card-header">
+                            <h3>Servidor Loja</h3>
+                        </div>
+                        <div class="card-body">
+                            <label for="adk_server_store">Tipo do Servidor</label>
+                            <input type="text" id="adk_server_store" name="adk_server_store"
+                                placeholder="Servidor Loja" class="form-control" value="${elem.tipo_servidor ?? ""}" disabled>
+                        
+                            <label for="adk_store_pdv">Dados do Servidor PDV</label>
+                            <textarea class="form-control" disabled>${elem.obs_loja}</textarea>
+
+                            <input type="hidden" id="id_store" name="id_store" value="${elem.id ?? ""}">
+                            <input type="hidden" id="id_adk_server" name="id_adk_server" value="${elem.id_adk_server ?? ""}">
+                            <div class="row">
+                                <div class="col-6">
+                                    <button class="btn-server" onclick="requestDeleteServerStore(${elem.id}, ${elem.id_contato})">Excluir</button>
+                                </div>
+                                <div class="col-6">
+                                        <button class="btn-server" onclick="requestUpdateServerStore(${elem.id}, ${elem.id_contato})">Atualizar</button>
+                                </div>
+                            </div> 
+                        </div>
                     </div>
-                </div>
-            </div>`;
-            document.getElementById('rowCardPDV').innerHTML += text;
-            console.log(elem);
+                </div>`;
+                console.log(elem);
+                document.getElementById(`rowServer${idServer}`).innerHTML += text;
+            } else return "";
         });
     } else {
         alert("HTTP-Error: " + response.status);
+        return "";
     }
 }
 
@@ -297,14 +392,25 @@ const requestUpdateServer = (id, idContact) => {
     .card-new-server input::placeholder{
         color: #c9c9c9;
     }
-    input{
-        width: 100%;
-        height:35px;
-        padding: 0 10px;
+    input[type="text"]{
         border-radius: 60px;
-        border: 1px solid #c9c9c9;
         transition-duration: .1s;
         cursor: pointer;
+        outline: none;
+    }
+    input[type="text"]:focus {
+        border: 1px solid #8E0E00;
+        box-shadow: 
+    }
+    textarea {
+        width: 100%;
+        border-radius: 10px;
+        border-color: #c9c9c9;
+    }
+    textarea:focus
+    {
+        border: 1px solid #8E0E00;
+        outline: none;
     }
 
     label{
@@ -332,10 +438,15 @@ const requestUpdateServer = (id, idContact) => {
     <div class="container-fluid" style="margin-top: 20px;">
         <div class="card card-new-server">
             <div class="card-body">
-                <form action="../contacts/updateContactServer" method="get">
+                <form action="../contacts/updateContactServer" method="post">
                 
-                    <label class="form-label">Servidor</label>
-                    <input type="text" name="adk_server">
+                    <label class="form-label">Tipo do Servidor</label>
+                    <input type="text" name="type_server" id="type_server" placeholder="Ex. AnyDesk"
+                        class="form-control">
+                
+                    <label class="form-label">Dados do Servidor</label>
+                    <textarea name="obs_server" id="obs_server"
+                        placeholder="Dados do Servidor"></textarea>
 
                     <input type="hidden" name="id_server" value="${id}" >
                     <input type="hidden" name="id_contact" value="${idContact}" >
@@ -354,7 +465,7 @@ const requestUpdateServer = (id, idContact) => {
     varWindow.document.write(text);
 }
 
-const requestUpdateServerStore = (id, idContact) => {
+const requestUpdateServerStore = (id,idContact) => {
     text = `
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
         integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
@@ -371,14 +482,27 @@ const requestUpdateServerStore = (id, idContact) => {
     .card-new-server input::placeholder{
         color: #c9c9c9;
     }
-    input{
+    input[type="text"]{
         width: 100%;
-        height:35px;
-        padding: 0 10px;
-        border-radius: 60px;
         border: 1px solid #c9c9c9;
+        border-radius: 60px;
         transition-duration: .1s;
         cursor: pointer;
+        outline: none;
+    }
+    input[type="text"]:focus {
+        border: 1px solid #8E0E00;
+        box-shadow: 
+    }
+    textarea {
+        width: 100%;
+        border-radius: 10px;
+        border-color: #c9c9c9;
+    }
+    textarea:focus
+    {
+        border: 1px solid #8E0E00;
+        outline: none;
     }
 
     label{
@@ -401,18 +525,18 @@ const requestUpdateServerStore = (id, idContact) => {
         box-shadow: 1px 1px 4px #8E0E00;
     }
     </style>
-    <title>Servidores</title>
+    <title>Atualizar Servidor Loja</title>
     
     <div class="container-fluid" style="margin-top: 20px;">
         <div class="card card-new-server">
             <div class="card-body">
-                <form action="../contacts/updateContactServer" method="get">
+                <form action="../contacts/updateContactServer" method="post">
                 
-                    <label class="form-label">Servidor Loja</label>
-                    <input type="text" name="adk_store_server">
+                    <label class="form-label">Tipo do Servidor Loja</label>
+                    <input type="text" name="type_server_store" placeholder="Ex. AnyDesk">
 
-                    <label class="form-label">Servidor PDV</label>
-                    <input type="text" name="adk_store_pdv">
+                    <label class="form-label">Dados do Servidor Loja</label>
+                    <textarea name="obs_store"></textarea>
 
                     <input type="hidden" name="id_store" value="${id}" >
                     <input type="hidden" name="id_contact" value="${idContact}" >

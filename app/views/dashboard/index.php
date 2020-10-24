@@ -33,13 +33,10 @@
                     <img src="https://www.satussistemas.com.br/wp-content/uploads/2019/08/COLOR.png" width="160"
                         height="45" alt="Satus Sistemas" loading="lazy">
                 </a>
-                <form class="d-flex">
-                    <input class="form-control mr-3 input-search" type="search" placeholder="Search" aria-label="Search"
-                        disabled>
-                    <button class="btn btn-outline-danger btn-search" type="submit">
-                        <span class="material-icons">search</span>
-                    </button>
-                </form>
+                <div class="d-flex">
+                    <input class="form-control mr-3 input-search" type="search" placeholder="Search" aria-label="Search" onchange="addPageSearchContact(this.value)">
+                    
+                </div>
                 <form action="../routes/exit" class="d-flex">
                     <button class="btn btn-outline-danger btn-exit" type="submit">
                         <span class="material-icons">exit_to_app</span>

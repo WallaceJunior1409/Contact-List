@@ -1,8 +1,9 @@
 <?php
     $contacts = new ContactsController();
+    
     $data = $contacts->showAllContacts();
     if ($data) $num = count($data);
-    else $num = 0
+    else $num = 0;
 ?>
 
 <div class="card">
@@ -15,7 +16,7 @@
                     <th>Empresa</th>
                 </tr >
             </thead>
-            <tbody style="color: #4B8EFF;">
+            <tbody style="color: #4B8EFF;" id="listContacts">
                 <?php
                     $td = "";
                     for ($i=0; $i < $num; $i++) { 

@@ -18,22 +18,10 @@
             try 
             {
                 $conn = Connection::openConnection();
-                /*
-                $query_params = array(
-                    "id_usuario" => $this->getId_user(),
-                    "nome" => $this->getName(),
-                    "empresa" => $this->getCompany(),
-                    "email" => $this->getEmail(),
-                    "tel_celular" => $this->getPhone(),
-                    "tel_empresa" => $this->getPhonecompany(),
-                    "observacoes" => $this->getObservations()
-                ); 
-                */
 
                 $sql = "INSERT INTO contatos (id_usuario, nome, empresa, email, tel_celular, tel_empresa, observacoes) VALUES (".$this->getId_user().", '".$this->getName()."', '".$this->getCompany()."', '".$this->getEmail()."', '".$this->getPhone()."', '".$this->getPhonecompany()."', '".$this->getObservations()."')";
-
-                //$result = pg_insert($conn, "contatos",$query_params);
                 $result = pg_query($conn, $sql);
+
                 $last_id = pg_fetch_array(pg_query("SELECT CURRVAL('contatos_id_seq')"));
                 $this->setId($last_id[0]);
 
@@ -41,6 +29,7 @@
                 return $result;
             } catch (\Throwable $th) 
             {
+                $conn = Connection::exitConnection();
                 return $th;
             }
         }
@@ -64,6 +53,7 @@
                 return $result;
             } catch (\Throwable $th) 
             {
+                $conn = Connection::exitConnection();
                 return $th;
             }
         }
@@ -74,13 +64,37 @@
             {
                 $conn = Connection::openConnection();
 
-                $query_params = array("id_usuario" => number_format($this->getId_user()));
-                $result = pg_select($conn, "contatos", $query_params);
+                if ($this->getId_user()) {
+                    $name = $this->getName()."%";
+                    $query_params = "SELECT * FROM contatos WHERE id_usuario = ".$this->getId_user()." AND nome LIKE '".$name."' ";
+                    
+                    $resultName = pg_exec($conn, $query_params);
+                    $dataName = pg_fetch_all($resultName);
 
-                if (!$result) return ;
-                return $result;
+                    if ($resultName && $dataName) return $dataName;
+                    else if ($this->getId_user() && $this->getCompany()) {
+                        $company = $this->getCompany()."%";
+                        $query_params = "SELECT * FROM contatos WHERE id_usuario = ".$this->getId_user()." AND empresa LIKE '".$company."' ";
+
+                        $resultCompany = pg_exec($conn, $query_params);
+                        $dataCompany = pg_fetch_all($resultCompany);
+
+                        if ($resultCompany && $dataCompany) return $dataCompany;
+                        else {
+                            $query_params = array(
+                                "id_usuario" => number_format($this->getId_user())
+                            );
+                            $result = pg_select($conn, "contatos", $query_params);
+
+                            if (!$result) return ;
+                            return $result;
+                        }
+                    }
+                }
+                
             } catch (\Throwable $th) 
             {
+                $conn = Connection::exitConnection();
                 return $th;
             }
         }
@@ -98,6 +112,7 @@
                 return $result;
             } catch (\Throwable $th) 
             {
+                $conn = Connection::exitConnection();
                 return $th;
             }
         }
@@ -115,6 +130,7 @@
                 return $result;
             } catch (\Throwable $th) 
             {
+                $conn = Connection::exitConnection();
                 return $th;
             }
         }

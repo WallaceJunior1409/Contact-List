@@ -42,6 +42,7 @@
                 {
                     $this->controller = "DashboardController";
                     $this->method = "index";
+                    header("Location: http://localhost:90/Projetos/Contatos/dashboard/index");
                 }
             } else 
             {
@@ -50,6 +51,7 @@
                 {
                     $this->controller = "LoginController";
                     $this->method = "index";
+                    header("Location: http://localhost:90/Projetos/Contatos/login/index");
                 }
             }
             return call_user_func(array(new $this->controller, $this->method), $this->params);

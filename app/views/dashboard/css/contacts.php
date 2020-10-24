@@ -11,17 +11,33 @@
     box-shadow: 0 0 .5rem rgb(10 10 10 / 25%);
 }
 
-.card-new-contact input,
-textarea {
+.card-new-contact label{
+    font-size: 14px;
+    font-weight: 500;
+}
+.card-new-contact input
+ {
     margin: 10px 0;
     border-radius: 60px;
     transition-duration: .1s;
     cursor: pointer;
 }
 
-.card-new-contact label{
-    font-size: 14px;
-    font-weight: 500;
+.card-new-contact textarea
+ {
+    width: 100%;
+    margin: 10px 0;
+    padding: 5px;
+    border: 1px solid #c9c9c9;
+    border-radius: 10px;
+    transition-duration: .1s;
+    cursor: pointer;
+}
+
+.card-new-contact textarea:focus
+ {
+    border: 1px solid #8E0E00;
+    outline: none;
 }
 
 .card-new-contact input::placeholder,
@@ -30,7 +46,7 @@ textarea {
 }
 
 .card-new-contact input:hover,
-textarea:hover {
+.card-new-contact textarea:hover {
     color: #8E0E00;
 }
 

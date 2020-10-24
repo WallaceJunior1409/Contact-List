@@ -15,7 +15,7 @@
         public function exit()
         {
             session_destroy();
-            header('Location: ../');
+            header("Location: http://localhost:90/Projetos/Contatos/login/index");
         }
 
         /**
