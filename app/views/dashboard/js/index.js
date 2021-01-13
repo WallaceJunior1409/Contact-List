@@ -15,7 +15,7 @@ const addPageContact = () => {
                 root.innerHTML += xmlHttpRequest.responseText;
             } else {
                 cardCreateContacts.innerHTML += `Error : ${xmlHttpRequest.status}`;
-                console.log(`Status : ${xmlHttpRequest.status}`);
+                //console.log(`Status : ${xmlHttpRequest.status}`);
             }
         }
     }
@@ -23,14 +23,14 @@ const addPageContact = () => {
 }
 addPageContact()
 
-const addPageSearchContact = async (params = "") => {
+const addPageSearchContact = async(params = "") => {
     document.getElementById('listContacts').innerHTML = "";
 
     let response = await fetch(`../contacts/searchContacts/${params}`);
 
-    if (response.ok) {    
+    if (response.ok) {
         let data = await response.json();
-        console.log(data);
+        //console.log(data);
 
         data.map((elem) => {
             let text = `
@@ -57,7 +57,7 @@ const addPageCreateContacts = () => {
                 root.innerHTML += xmlHttpRequest.responseText;
             } else {
                 cardCreateContacts.innerHTML += `Error : ${xmlHttpRequest.status}`;
-                console.log(`Status : ${xmlHttpRequest.status}`);
+                //console.log(`Status : ${xmlHttpRequest.status}`);
             }
         }
     }
@@ -74,13 +74,13 @@ const viewContact = (id) => {
             if (xmlHttpRequest.status === 0 || (xmlHttpRequest.status >= 200 && xmlHttpRequest.status < 400)) {
                 root.innerHTML += xmlHttpRequest.responseText;
 
-                console.log(id);
+                //console.log(id);
                 requestDataContact(id);
                 requestDataAnydeskServer(id);
 
             } else {
                 cardCreateContacts.innerHTML += `Error : ${xmlHttpRequest.status}`;
-                console.log(`Status : ${xmlHttpRequest.status}`);
+                //console.log(`Status : ${xmlHttpRequest.status}`);
             }
         }
     }
@@ -97,7 +97,7 @@ const requestDataContact = async(id) => {
 
     if (response.ok) {
         let data = await response.json();
-        console.log(data);
+        //console.log(data);
         document.getElementById('id_contact').value = data[0].id ? data[0].id : "";
         document.getElementById('name').value = data[0].nome ? data[0].nome : "";
         document.getElementById('company').value = data[0].empresa ? data[0].empresa : "";
@@ -123,7 +123,7 @@ const createContact = () => {
 
     newForm.append("type_server", document.getElementById('type_server').value ?? "");
     newForm.append("obs_server", document.getElementById('obs_server').value ?? "");
-    
+
     newForm.append("type_server_store", document.getElementById('type_server_store').value ?? "");
     newForm.append("obs_store", document.getElementById('obs_store').value ?? "");
 
@@ -134,10 +134,11 @@ const createContact = () => {
 
 
 const requestDeleteContact = async() => {
-    const id = document.getElementById('id_contact').value;
-    window.open(`http://localhost:90/Projetos/Contatos/contacts/deleteContact/${id}`);
-    on()
-    window.close();
+    if (confirm("Você realmente deseja excluir esse contato?")) {
+        const id = document.getElementById('id_contact').value;
+        window.open(`http://localhost:90/Projetos/Contatos/contacts/deleteContact/${id}`);
+        window.close();
+    } else alert("Contato não deletedo!");
 }
 
 const newPopup = (idServer) => {
@@ -260,14 +261,14 @@ const newPopup = (idServer) => {
     varWindow.document.write(text);
 }
 
-const requestDataAnydeskServer = async (id) => {
+const requestDataAnydeskServer = async(id) => {
     document.getElementById('serverRoot').innerHTML = "";
 
     let responseServer = await fetch(`../contacts/showAnydeskServerJson/${id}`);
 
-    if (responseServer.ok) {    
+    if (responseServer.ok) {
         let dataServer = await responseServer.json();
-        console.log(dataServer);
+        //console.log(dataServer);
 
         dataServer.map((elem) => {
             let text = `
@@ -288,7 +289,7 @@ const requestDataAnydeskServer = async (id) => {
                             
                                 <div class="row">
                                     <div class="col-6">
-                                        <button class="btn-server" onclick="requestDeleteServerStore(${elem.id}, ${elem.id_contato})">Excluir</button>
+                                        <button class="btn-server" onclick="requestDeleteServer(${elem.id}, ${elem.id_contato})">Excluir</button>
                                     </div>
                                     <div class="col-6">
                                         <button class="btn-server" onclick="requestUpdateServer(${elem.id}, ${elem.id_contato})">Atualizar</button>
@@ -320,7 +321,7 @@ const requestDataAnydeskServer = async (id) => {
                 <div>
             </div>`;
             document.getElementById('serverRoot').innerHTML += text;
-            console.log(elem);
+            //console.log(elem);
             requestDataAnydeskStore(elem.id_contato, elem.id);
         });
     } else {
@@ -328,7 +329,7 @@ const requestDataAnydeskServer = async (id) => {
     }
 }
 
-const requestDataAnydeskStore = async (id, idServer) => {
+const requestDataAnydeskStore = async(id, idServer) => {
     document.getElementById(`rowServer${idServer}`).innerHTML = "";
 
     let responseStore = await fetch(`../contacts/showAnydeskStoreJson/${id}/${idServer}`);
@@ -365,7 +366,7 @@ const requestDataAnydeskStore = async (id, idServer) => {
                         </div>
                     </div>
                 </div>`;
-                console.log(elem);
+                //console.log(elem);
                 document.getElementById(`rowServer${idServer}`).innerHTML += text;
             } else return "";
         });
@@ -393,6 +394,10 @@ const requestUpdateServer = (id, idContact) => {
         color: #c9c9c9;
     }
     input[type="text"]{
+        width: 100%;
+        height: 35px;
+        padding: 0px 10px;
+        border: 1px solid #c9c9c9;
         border-radius: 60px;
         transition-duration: .1s;
         cursor: pointer;
@@ -404,13 +409,19 @@ const requestUpdateServer = (id, idContact) => {
     }
     textarea {
         width: 100%;
+        height: 80px;
+        padding: 4px 10px;
         border-radius: 10px;
         border-color: #c9c9c9;
+        font-size: 16px;
     }
     textarea:focus
     {
         border: 1px solid #8E0E00;
         outline: none;
+    }
+    .card-new-server textarea::placeholder{
+        color: #c9c9c9;
     }
 
     label{
@@ -465,7 +476,7 @@ const requestUpdateServer = (id, idContact) => {
     varWindow.document.write(text);
 }
 
-const requestUpdateServerStore = (id,idContact) => {
+const requestUpdateServerStore = (id, idContact) => {
     text = `
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
         integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
@@ -484,6 +495,8 @@ const requestUpdateServerStore = (id,idContact) => {
     }
     input[type="text"]{
         width: 100%;
+        height: 35px;
+        padding: 0px 10px;
         border: 1px solid #c9c9c9;
         border-radius: 60px;
         transition-duration: .1s;
@@ -496,13 +509,19 @@ const requestUpdateServerStore = (id,idContact) => {
     }
     textarea {
         width: 100%;
+        height: 80px;
+        padding: 4px 10px;
         border-radius: 10px;
         border-color: #c9c9c9;
+        font-size: 16px;
     }
     textarea:focus
     {
         border: 1px solid #8E0E00;
         outline: none;
+    }
+    .card-new-server textarea::placeholder{
+        color: #c9c9c9;
     }
 
     label{
@@ -536,7 +555,7 @@ const requestUpdateServerStore = (id,idContact) => {
                     <input type="text" name="type_server_store" placeholder="Ex. AnyDesk">
 
                     <label class="form-label">Dados do Servidor Loja</label>
-                    <textarea name="obs_store"></textarea>
+                    <textarea name="obs_store" placeholder="Dados do Servidor da Loja"></textarea>
 
                     <input type="hidden" name="id_store" value="${id}" >
                     <input type="hidden" name="id_contact" value="${idContact}" >
@@ -655,59 +674,59 @@ const requestDeleteServer = (id, idContact) => {
     text = `
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
         integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+    
     <style>
-    .card-new-server {
-        position: relative;
-        transition-duration: .2s;
-        background: #f8f8f8;
-    }
-    .card-new-server:hover {
-        background: white;
-        box-shadow: 0 0 .5rem rgb(10 10 10 / 25%);
-    }
-    .card-new-server input::placeholder{
-        color: #c9c9c9;
-    }
-    input{
-        width: 100%;
-        padding: 0 10px;
-        border-radius: 60px;
-        border: 1px solid #c9c9c9;
-        transition-duration: .1s;
-        cursor: pointer;
-    }
+        .card-new-server {
+            position: relative;
+            transition-duration: .2s;
+            background: #f8f8f8;
+        }
+        .card-new-server:hover {
+            background: white;
+            box-shadow: 0 0 .5rem rgb(10 10 10 / 25%);
+        }
+        .card-new-server input::placeholder{
+            color: #c9c9c9;
+        }
+        input{
+            width: 100%;
+            padding: 0 10px;
+            border-radius: 60px;
+            border: 1px solid #c9c9c9;
+            transition-duration: .1s;
+            cursor: pointer;
+        }
 
-    label{
-        font-size: 14px;
-        font-weight: 500;
-    }
-    h5 {
-        font-size: 14px;
-    }
-    .btn {
-        width: 334px;
-        margin-top: 10px;
-        cursor: pointer;
-        color: white;
-        background: #8E0E00;
-        background: -webkit-linear-gradient(to right, #1F1C18, #8E0E00);
-        background: linear-gradient(to right, #1F1C18, #8E0E00);
+        label{
+            font-size: 14px;
+            font-weight: 500;
+        }
+        h5 {
+            font-size: 14px;
+        }
+        .btn {
+            width: 334px;
+            margin-top: 10px;
+            cursor: pointer;
+            color: white;
+            background: #8E0E00;
+            background: -webkit-linear-gradient(to right, #1F1C18, #8E0E00);
+            background: linear-gradient(to right, #1F1C18, #8E0E00);
 
-        transition: .3s;
-    }
-    .btn:hover{
-        color: white;
-        box-shadow: 1px 1px 4px #8E0E00;
-    }
+            transition: .3s;
+        }
+        .btn:hover{
+            color: white;
+            box-shadow: 1px 1px 4px #8E0E00;
+        }
     </style>
-    <title>Servidores</title>
+
+    <title>Servidor Prime</title>
     
     <div class="container-fluid" style="margin-top: 20px;">
         <div class="card card-new-server">
             <div class="card-body">
                 <form action="../contacts/deleteServer" method="post">
-
-                    <h5 class='text-center'>${document.getElementById('name').value ?? document.getElementById('company').value}</h5>
 
                     <label class="form-label">Id</label>
                     <input type="text" name="id_server" value="${id}" >
@@ -775,7 +794,7 @@ const requestDeleteServerStore = (id, idContact) => {
         box-shadow: 1px 1px 4px #8E0E00;
     }
     </style>
-    <title>Servidores</title>
+    <title>Servidor Loja</title>
     
     <div class="container-fluid" style="margin-top: 20px;">
         <div class="card card-new-server">

@@ -83,8 +83,8 @@
     background: -webkit-linear-gradient(to right, #f12711, #f5af19); /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to right, #f12711, #f5af19);
     box-shadow: 2px 1px 13px #f12711;
+    border: 1px solid #f5af19;
 }
-
 
 /*
     Sign Up

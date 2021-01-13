@@ -243,9 +243,8 @@
 
                     $result = $anydesk_server->delete();
                     if (!$result) echo "<script>window.close();</script>";
-                    var_dump($result);
-                }
-                echo "<script>window.close();</script>";
+                    //var_dump($result);
+                } else echo  "<script>window.close();</script>";
             } else echo "<script>window.close();</script>";
             echo "<script>window.close();</script>";
         }

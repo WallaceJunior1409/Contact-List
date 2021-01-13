@@ -11,6 +11,7 @@
         integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
+    <link rel="icon" href="https://www.satussistemas.com.br/wp-content/uploads/2019/07/cropped-18698538_1364800530255738_4495280055020493390_n-32x32.png" sizes="32x32">
     <!-- Style CSS -->
     <?php
       include_once "./app/views/dashboard/css/style.php";
@@ -21,7 +22,7 @@
     <!-- Font Roboto -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
 
-    <title>Dashboard</title>
+    <title>Satus - Contatos</title>
 </head>
 
 <body>

@@ -42,7 +42,7 @@
                 {
                     $this->controller = "DashboardController";
                     $this->method = "index";
-                    header("Location: http://localhost:90/Projetos/Contatos/dashboard/index");
+                    header("Location: http:/localhost:90/Projetos/Contatos/dashboard/index");
                 }
             } else 
             {

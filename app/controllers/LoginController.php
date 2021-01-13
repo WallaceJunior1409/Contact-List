@@ -1,9 +1,14 @@
 <?php
     class LoginController 
     {
-        public function index()
+        public function index():void
         {
             include_once "./app/views/login/index.php";
+        }
+
+        public function javascript_login():void
+        {
+            include_once "./app/views/login/js/index.js";
         }
 
         public function sign_in()

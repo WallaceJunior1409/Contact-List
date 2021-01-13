@@ -1,0 +1,3 @@
+# Configuração
+- criar uma arquivo de configuração que contenha todos os dados necessario.
+- host, port, port db ...
